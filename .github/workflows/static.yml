@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checklist de Mel & Plantas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      border-radius: 6px;
+      padding: 10px 15px;
+      margin-bottom: 8px;
+      transition: background 0.3s ease;
+    }
+    .status-select {
+      padding: 6px;
+      border-radius: 4px;
+    }
+    .status-completo {
+      background-color: #c8f7c5 !important;
+    }
+    .status-avancado {
+      background-color: #fff5b3 !important;
+    }
+    .status-andamento {
+      background-color: #d0ecff !important;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📋 Checklist de Mel & Plantas</h1>
+  <div id="checklist"></div>
+
+  <script>
+    const dados = [
+      "3 Honey & [Pollinated] 0.24kg Blueberry",
+      "3 Honey & [Pollinated] 0.06kg Orange Tulip",
+      "3 Honey & [Honey Glazed] 1.4kg Rose",
+      "5 Honey & [Pollinated] 0.33kg Carrot",
+      "5 Honey & [Pollinated] 0.36kg Strawberry",
+      "5 Honey & [Pollinated] 0.9kg Tomato",
+      "7 Honey & [Pollinated] 2.8kg Corn",
+      "7 Honey & [Honey Glazed] 3.6kg Apple",
+      "7 Honey & [Pollinated] 4.8kg Bamboo",
+      "10 Honey & [Pollinated] 2.5kg Foxglove",
+      "10 Honey & [Pollinated] 8.4kg Watermelon",
+      "10 Honey & [Pollinated] 9.6kg Cacao",
+      "13 Honey & [Pollinated] 3.6kg Nectarine",
+      "13 Honey & [Pollinated] 15.4kg Dragonfruit",
+      "13 Honey & [Honey Glazed] 17.8kg Coconut",
+      "18 Honey & [Pollinated] 20kg Mango",
+      "18 Honey & [Pollinated] 9.5kg Pumpkin",
+      "18 Honey & [Pollinated] 4.6kg Grape",
+      "23 Honey & [Pollinated] 30kg Mushroom",
+      "23 Honey & [Pollinated] 4kg Lilac",
+      "23 Honey & [Pollinated] 10.08kg Cactus",
+      "28 Honey & [Honey Glazed] 1.65kg Rose",
+      "28 Honey & [Pollinated] 11kg Hive Fruit",
+      "28 Honey & [Pollinated] 7.8kg Pepper",
+      "33 Honey & [Pollinated] 6kg Bamboo",
+      "33 Honey & [Pollinated] 7.2kg Pink Lily",
+      "35 Honey & [Pollinated] 24.6kg Mango",
+      "35 Honey & [Honey Glazed] 5.6kg Grape",
+      "37 Honey & [Honey Glazed] 15.6kg Beanstalk",
+      "40 Honey & [Pollinated] 24.5kg Purple Dahlia"
+    ];
+
+    const checklist = document.getElementById("checklist");
+
+    function aplicarCor(div, status) {
+      div.classList.remove("status-completo", "status-avancado", "status-andamento");
+      if (status === "Completo") {
+        div.classList.add("status-completo");
+      } else if (status === "Avançado") {
+        div.classList.add("status-avancado");
+      } else {
+        div.classList.add("status-andamento");
+      }
+    }
+
+    function criarItem(texto) {
+      const div = document.createElement("div");
+      div.className = "item";
+
+      const span = document.createElement("span");
+      span.textContent = texto;
+
+      const select = document.createElement("select");
+      select.className = "status-select";
+      const opcoes = ["Andamento", "Avançado", "Completo"];
+
+      opcoes.forEach(op => {
+        const option = document.createElement("option");
+        option.value = op;
+        option.textContent = op;
+        select.appendChild(option);
+      });
+
+      const statusSalvo = localStorage.getItem("status_" + texto);
+      if (statusSalvo) {
+        select.value = statusSalvo;
+        aplicarCor(div, statusSalvo);
+      } else {
+        select.value = "Andamento";
+        aplicarCor(div, "Andamento");
+      }
+
+      select.addEventListener("change", () => {
+        localStorage.setItem("status_" + texto, select.value);
+        aplicarCor(div, select.value);
+      });
+
+      div.appendChild(span);
+      div.appendChild(select);
+      checklist.appendChild(div);
+    }
+
+    dados.forEach(criarItem);
+  </script>
+
+</body>
+</html>
